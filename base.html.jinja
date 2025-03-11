@@ -4,19 +4,18 @@
     <title>Curriculum Vitae</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"  rel="stylesheet">
-    <link href="style/base.css" rel="stylesheet" type="text/css">
+    {% include "style.css.jinja" %}
 </head>
 
+<!-- Tree is anything containing leaves.  -->
+<!-- Can be trees and leaves. -->
+
 <body>
-    <div format="" id="docname"><h5 class=>Curriculum Vit&aelig;</h5>
-    <div class="vline"></div>
-    {% if basics %}
-        {% include "basics.html.jinja" %}   
-    {% endif %}
-    <div class="vline"></div>
-    <div class="flex">
+    <div id="docname"><h5 class="align-right hline">Curriculum Vit&aelig;</h5>
+    {% include "basics.html.jinja" %}   
+    {% include "profiles.html.jinja" %}   
+    <div class="tree flex">
         <div class="column column--left">
-            <div class="leaf"></div>
             {% set items=(cv.education | sort(attribute='startDate')) %}
             {% set title="Education" %}
             {% include "tree.html.jinja" %}
@@ -28,25 +27,10 @@
             {% include "tree.html.jinja" %}
         </div>
         <div class="column column--right">
-            <div class="leaf"></div>
             {% set items=(cv.skills) %}
             {% set title="Skills" %}
             {% include "tree.html.jinja" %}
-            {% if (cv.languages)|length > 0 %}
-            <div class="leaf">
-                <h2 class="stub" id="languages">Languages</h2>
-                {% for group, items in languages|groupby(attribute="rating", default="It's flexlicated") %}
-                <div class="leaf">
-                    <h3 class="stub">{{group}}</h3>
-                    {%for item in items %}
-                    <div class="flex flex__body">
-                        <p>{{item.language}}</p>
-                    </div>
-                    {%endfor%}
-                </div>
-                {% endfor %}
-            </div>
-            {%endif%}
+            {% include "languages.html.jinja" %}
             {% if (cv.qualifications)|length > 0 %}
             <div class="leaf">
                 <h2 class="stub" id="qualifications">Qualifications</h2>
@@ -59,13 +43,17 @@
             {%endif%}
         </div>
     </div>
-    <div class="tree" style="display: none;">
-        {% for reference in cv.references %}
-        <div class="onelineitem">
-            {% include "reference_card.html.jinja" %}
-        </div>
-        {% endfor %}
+    {% if cv.references %}
+    <div class="tree">
+            {% for reference in cv.references %}
+            <div class="onelineitem">
+                {% include "reference_card.html.jinja" %}
+            </div>
+            {% endfor %}
     </div>
+    {% endif %}
+    {% include "footer.html.jinja" %}
+
 </body>
 
 </html>
